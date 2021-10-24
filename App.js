@@ -4,12 +4,16 @@ import { StyleSheet } from 'react-native'
 import { store } from './store'
 import HomeScreen from './screen/HomeScreen'
 
+import { SafeAreaProvider } from 'react-native-safe-area-context'
+
 // setup redux - done
 
 export default function App() {
   return (
     <Provider store={store}>
-      <HomeScreen />
+      <SafeAreaProvider>
+        <HomeScreen />
+      </SafeAreaProvider>
     </Provider>
   )
 }
