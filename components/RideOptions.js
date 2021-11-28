@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core'
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View, Image } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
@@ -27,6 +27,7 @@ const data = [
 ]
 
 const RideOptions = () => {
+  const [selected, setSelected] = useState()
   const navigation = useNavigation()
   return (
     <View>
@@ -48,23 +49,38 @@ const RideOptions = () => {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <TouchableOpacity
-            style={tw`flex-row items-center justify-between px-10`}
+            style={tw`flex-row items-center justify-between px-10 ${
+              item.id === selected?.id && 'bg-gray-200'
+            }`}
+            onPress={() => setSelected(item)}
           >
             <Image
               style={{
-                width: 100,
-                height: 100,
+                width: 78,
+                height: 78,
                 resizeMode: 'contain',
               }}
               source={{ uri: item.image }}
             />
-            <View>
-              <Text>{item.title}</Text>
+            <View style={tw`-ml-6`}>
+              <Text style={tw`font-semibold text-xl`}>{item.title}</Text>
               <Text>Travel Time...</Text>
             </View>
+            <Text style={tw`text-xl`}>99₹</Text>
           </TouchableOpacity>
         )}
       />
+      {/*  */}
+      <View>
+        <TouchableOpacity
+          disabled={!selected}
+          style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-200'}`}
+        >
+          <Text style={tw`text-center text-white text-xl`}>
+            Choose {selected?.title}
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }

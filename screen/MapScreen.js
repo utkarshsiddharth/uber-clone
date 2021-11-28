@@ -14,7 +14,6 @@ const MapScreen = () => {
   const Stack = createStackNavigator()
   return (
     <View style={tw`py-4`}>
-      <Text>Here's the map!!</Text>
       <View style={tw`h-1/2`}>
         <Map />
       </View>

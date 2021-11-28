@@ -11,7 +11,6 @@ import MapViewDirections from 'react-native-maps-directions'
 const Map = () => {
   const origin = useSelector(selectOrigin)
   const destination = useSelector(selectDestination)
-  console.log({ origin, destination })
   const mapRef = useRef(null)
 
   useEffect(() => {
@@ -21,6 +20,21 @@ const Map = () => {
       edgePadding: { top: 50, right: 50, bottom: 50, left: 50 },
     })
   }, [origin, destination])
+
+  useEffect(() => {
+    if (!origin || !destination) return
+    const getTravelTime = async () => {
+      fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origin=${origin.description}&destination=${destination.description}&key=${GOOGLE_MAPS_APIKEY}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data)
+        })
+    }
+    getTravelTime()
+  }, [origin, destination, GOOGLE_MAPS_APIKEY])
+
   return (
     <MapView
       ref={mapRef}
@@ -35,7 +49,7 @@ const Map = () => {
     >
       {origin && destination && (
         <MapViewDirections
-          // lineDashPattern={[1]}
+          lineDashPattern={[1]}
           origin={origin.description}
           destination={destination.description}
           apikey={GOOGLE_MAPS_APIKEY}
