@@ -29,6 +29,14 @@ const data = [
   },
 ]
 
+const calcFare = () => {
+  new Intl.NumberFormat('en-gb', {
+    style: 'currency',
+    currency: 'GBP',
+  }).format(travelTimeInfo?.duration?.value * search_charge_rate * multiplier) /
+    100
+}
+
 const search_charge_rate = 1.5
 
 const RideOptions = () => {
@@ -51,7 +59,7 @@ const RideOptions = () => {
   return (
     <View>
       <View
-        style={tw`flex-row justify-between items-center pl-8 pr-32 bg-black`}
+        style={tw`flex-row justify-between items-center pl-8 pr-20 bg-black`}
       >
         <TouchableOpacity
           style={tw`text-center `}
@@ -101,7 +109,7 @@ const RideOptions = () => {
         )}
       />
       {/*  */}
-      <View>
+      <View style={tw`mt-auto border-t border-gray-200`}>
         <TouchableOpacity
           disabled={!selected}
           style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-200'}`}

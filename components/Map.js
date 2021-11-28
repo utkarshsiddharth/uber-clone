@@ -36,7 +36,6 @@ const Map = () => {
     }
     getTravelTime()
   }, [origin, destination, GOOGLE_MAPS_APIKEY])
-
   return (
     <MapView
       ref={mapRef}
@@ -51,12 +50,20 @@ const Map = () => {
     >
       {origin && destination && (
         <MapViewDirections
-          lineDashPattern={[1]}
-          origin={origin.description}
-          destination={destination.description}
+          // lineDashPattern={[3]}
+          origin={{
+            latitude: origin.location.lat,
+            longitude: origin.location.lng,
+          }}
+          destination={{
+            latitude: destination.location.lat,
+            longitude: destination.location.lng,
+          }}
           apikey={GOOGLE_MAPS_APIKEY}
           strokeColor='black'
-          strokeWidth={3}
+          strokeWidth={5}
+          mode='DRIVING'
+          language='en'
         />
       )}
       {origin && (

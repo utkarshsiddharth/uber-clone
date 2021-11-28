@@ -9,11 +9,20 @@ import tw from 'tailwind-react-native-classnames'
 import Map from '../components/Map.js'
 import NavigationCard from '../components/NavigationCard.js'
 import RideOptions from '../components/RideOptions'
-import { ScrollView } from 'react-native-gesture-handler'
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler'
+import { Icon } from 'react-native-elements'
+import { useNavigation } from '@react-navigation/native'
 const MapScreen = () => {
+  const navigation = useNavigation()
+
   const Stack = createStackNavigator()
   return (
     <View style={tw`py-4`}>
+      <View style={styles.hamberger}>
+        <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+          <Icon name='menu' color='gray' size={32} />
+        </TouchableOpacity>
+      </View>
       <View style={tw`h-1/2`}>
         <Map />
       </View>
@@ -41,4 +50,15 @@ const MapScreen = () => {
 
 export default MapScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  hamberger: {
+    position: 'absolute',
+    zIndex: 200,
+    top: 48,
+    left: 28,
+    padding: 3,
+    borderRadius: 6,
+    backgroundColor: 'white',
+    elevation: 10,
+  },
+})
