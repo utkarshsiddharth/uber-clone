@@ -4,7 +4,10 @@ import { StyleSheet, Text, View, Image } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { FlatList, TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { useSelector } from 'react-redux'
 import tw from 'tailwind-react-native-classnames'
+import { selectTravelTimeInfo } from '../slices/navSlice'
+
 const data = [
   {
     id: 'Uber-X-123',
@@ -20,15 +23,31 @@ const data = [
   },
   {
     id: 'Uber-LUX-789',
-    title: 'UberX',
-    multiplier: 1.5,
+    title: 'UberLUX',
+    multiplier: 1.75,
     image: 'https://links.papareact.com/7pf',
   },
 ]
 
+const search_charge_rate = 1.5
+
 const RideOptions = () => {
   const [selected, setSelected] = useState()
+  const [fare, setFare] = useState(0)
   const navigation = useNavigation()
+  const travelTimeInfo = useSelector(selectTravelTimeInfo)
+
+  // calculate the fare //
+  const getCalculatedFare = (item) => {
+    const calcFare = (
+      travelTimeInfo?.distance?.text.split(' ')[0] *
+      search_charge_rate *
+      1.6 *
+      12 *
+      item.multiplier
+    ).toFixed()
+    return calcFare
+  }
   return (
     <View>
       <View
@@ -41,7 +60,7 @@ const RideOptions = () => {
           <Icon name='chevron-left' type='font-awesome' color='white' />
         </TouchableOpacity>
         <Text style={tw` text-center text-xl py-5 text-white`}>
-          Select A Ride
+          Select A Ride - {travelTimeInfo?.distance.text}
         </Text>
       </View>
       <FlatList
@@ -52,7 +71,18 @@ const RideOptions = () => {
             style={tw`flex-row items-center justify-between px-10 ${
               item.id === selected?.id && 'bg-gray-200'
             }`}
-            onPress={() => setSelected(item)}
+            onPress={() => {
+              setSelected(item)
+              setFare(
+                (
+                  travelTimeInfo?.distance?.text.split(' ')[0] *
+                  search_charge_rate *
+                  1.6 *
+                  12 *
+                  item.multiplier
+                ).toFixed()
+              )
+            }}
           >
             <Image
               style={{
@@ -64,9 +94,9 @@ const RideOptions = () => {
             />
             <View style={tw`-ml-6`}>
               <Text style={tw`font-semibold text-xl`}>{item.title}</Text>
-              <Text>Travel Time...</Text>
+              <Text>{travelTimeInfo?.duration.text} - Travel Time</Text>
             </View>
-            <Text style={tw`text-xl`}>99₹</Text>
+            <Text style={tw`text-xl`}>{`${getCalculatedFare(item)}₹`}</Text>
           </TouchableOpacity>
         )}
       />
@@ -77,7 +107,7 @@ const RideOptions = () => {
           style={tw`bg-black py-3 m-3 ${!selected && 'bg-gray-200'}`}
         >
           <Text style={tw`text-center text-white text-xl`}>
-            Choose {selected?.title}
+            Choose {selected?.title} - {fare}₹
           </Text>
         </TouchableOpacity>
       </View>
