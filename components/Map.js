@@ -50,7 +50,7 @@ const Map = () => {
     >
       {origin && destination && (
         <MapViewDirections
-          // lineDashPattern={[3]}
+          lineDashPattern={[1]}
           origin={{
             latitude: origin.location.lat,
             longitude: origin.location.lng,
